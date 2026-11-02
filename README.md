@@ -94,4 +94,4 @@ MindMirror is a self-reflection and wellness project. Its emotion estimation is 
 
 ## 👩‍💻 Built With
 
-Made with 🌿 as a hackathon project.
+“Developed with care as a hackathon project.”
