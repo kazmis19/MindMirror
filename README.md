@@ -94,3 +94,7 @@ MindMirror/
 - Do not claim clinical accuracy, real-time crisis monitoring, counsellor integration, or validated AI screening.
 - Do not enter real private journal entries in a public demo.
 - Confirm the hackathon's rules on data collection, consent, AI usage and deployment.
+
+  ## Live Demo
+
+[View MindMirror](https://mindmirror-tbso.onrender.com/)
