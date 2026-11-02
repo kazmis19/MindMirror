@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>MindMirror — Your emotional reflection space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">◒</div><div><b>mindmirror</b><small>YOUR INNER SPACE</small></div></div>
+      <div class="side-label">WORKSPACE</div>
+      <button class="nav active" data-page="home"><span>⌂</span> Overview</button>
+      <button class="nav" data-page="checkin"><span>✦</span> Mood check-in</button>
+      <button class="nav" data-page="journal"><span>▤</span> My journal</button>
+      <button class="nav" data-page="insights"><span>◷</span> Insights</button>
+      <button class="nav" data-page="companion"><span>☼</span> Reflection space</button>
+      <div class="side-bottom">
+        <button class="nav" data-page="support"><span>♡</span> Support & safety</button>
+        <div class="privacy-note"><span>●</span> Your space, your pace.<small>Prototype data is stored locally by the server.</small></div>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div class="mobile-brand">◒ mindmirror</div><div class="top-right"><span class="live-dot"></span> A moment for yourself</div></header>
+      <section id="page-home" class="page active">
+        <div class="welcome"><div><p class="eyebrow">MONDAY, YOUR WAY</p><h1>A little space to<br><em>check in with yourself.</em></h1><p class="sub">You don't have to have it all figured out. Start with how you feel.</p></div><div class="orb"><div class="orb-inner">◒</div></div></div>
+        <div class="quick-grid">
+          <button class="quick-card lavender" data-go="checkin"><span class="quick-icon">✦</span><b>How are you feeling?</b><small>Take a quick mood check-in</small><span class="arrow">↗</span></button>
+          <button class="quick-card peach" data-go="journal"><span class="quick-icon">▤</span><b>Write it out</b><small>Put your thoughts into words</small><span class="arrow">↗</span></button>
+          <button class="quick-card mint" data-go="companion"><span class="quick-icon">☼</span><b>Reflect with me</b><small>A gentle space to think aloud</small><span class="arrow">↗</span></button>
+        </div>
+        <div class="section-head"><div><p class="eyebrow">YOUR RECENT ACTIVITY</p><h2>Your reflection timeline</h2></div><button class="text-btn" data-go="insights">View insights ↗</button></div>
+        <div id="recent-list" class="entry-list"><div class="empty">Your recent check-ins and journal entries will appear here.</div></div>
+        <p class="disclaimer">MindMirror supports self-reflection. It is not a diagnostic tool or a substitute for professional care.</p>
+      </section>
+
+      <section id="page-checkin" class="page">
+        <p class="eyebrow">MOOD CHECK-IN</p><h1>What is your mood<br><em>like right now?</em></h1>
+        <p class="sub">There is no right or wrong answer. Choose a feeling, then tell us a little about it.</p>
+        <div class="panel form-panel"><div class="mood-options">
+          <button class="mood" data-mood="happy"><span>☀️</span>Happy</button><button class="mood" data-mood="calm"><span>🌿</span>Calm</button><button class="mood" data-mood="sad"><span>🌧️</span>Sad</button><button class="mood" data-mood="anxious"><span>🌊</span>Anxious</button><button class="mood" data-mood="angry"><span>🔥</span>Frustrated</button><button class="mood" data-mood="tired"><span>☁️</span>Tired</button>
+        </div><label for="checkin-text">What's on your mind?</label><textarea id="checkin-text" placeholder="Today has been..."></textarea><button id="save-checkin" class="primary">Save my check-in <span>→</span></button><div id="checkin-result" class="result hidden"></div></div>
+      </section>
+
+      <section id="page-journal" class="page">
+        <p class="eyebrow">MY JOURNAL</p><h1>Let your thoughts<br><em>find a little space.</em></h1><p class="sub">Write freely. This is a place to reflect, not to judge yourself.</p>
+        <div class="panel form-panel"><label for="journal-text">Dear journal...</label><textarea id="journal-text" class="journal-area" placeholder="What happened today? How did it make you feel? What do you need right now?"></textarea><div class="form-foot"><small id="word-count">0 / 4000 characters</small><button id="save-journal" class="primary">Save entry <span>→</span></button></div><div id="journal-result" class="result hidden"></div></div>
+        <div class="section-head"><div><p class="eyebrow">YOUR WORDS</p><h2>Past entries</h2></div><button id="export-btn" class="text-btn">Export my data ↓</button></div><div id="journal-list" class="entry-list"></div>
+      </section>
+
+      <section id="page-insights" class="page">
+        <p class="eyebrow">PATTERNS, NOT LABELS</p><h1>Getting to know<br><em>your emotional patterns.</em></h1><p class="sub">These reflections are estimates from the words you choose to share.</p>
+        <div class="stats"><div class="stat"><small>ENTRIES ANALYSED</small><b id="stat-total">0</b><span>Recent entries</span></div><div class="stat"><small>AVERAGE MOOD SCORE</small><b id="stat-score">—</b><span>Estimated scale: 1–5</span></div><div class="stat"><small>MOST COMMON THEME</small><b id="stat-theme">—</b><span>In recent entries</span></div></div>
+        <div class="chart-grid"><div class="panel"><h3>Emotion themes</h3><canvas id="emotion-chart"></canvas></div><div class="panel"><h3>Recent mood estimates</h3><canvas id="trend-chart"></canvas></div></div>
+        <div class="insight-card"><span>✧ A gentle reflection</span><p id="insight-text">Add a few entries to discover reflections about your patterns.</p></div>
+      </section>
+
+      <section id="page-companion" class="page">
+        <p class="eyebrow">REFLECTION SPACE</p><h1>A conversation<br><em>with room to breathe.</em></h1><p class="sub">Use a prompt to explore your thoughts. This companion is supportive, not a therapist or emergency service.</p>
+        <div class="chat-wrap panel"><div class="chat-intro"><div class="chat-avatar">◒</div><div><b>Your reflection companion</b><small>Here to help you put feelings into words</small></div></div><div id="chat-messages" class="chat-messages"><div class="bubble bot">Hi. What has been taking up space in your mind today?</div></div><div class="prompt-row"><button class="prompt">I'm feeling overwhelmed</button><button class="prompt">Help me reflect on today</button><button class="prompt">I need a small positive step</button></div><div class="chat-input"><input id="chat-text" placeholder="Share what's on your mind..." maxlength="2000"><button id="send-chat">↑</button></div></div>
+      </section>
+
+      <section id="page-support" class="page">
+        <p class="eyebrow">SUPPORT & SAFETY</p><h1>You deserve<br><em>support beyond a screen.</em></h1><p class="sub">If things feel difficult, reaching out to a real person can make a difference.</p>
+        <div class="support-grid"><div class="support-card"><span>♡</span><h3>Talk to someone you trust</h3><p>Consider contacting a trusted friend, family member, teacher, counsellor or another supportive person.</p></div><div class="support-card"><span>✚</span><h3>If you are in immediate danger</h3><p>Contact your local emergency number or go to the nearest emergency department. If possible, stay with someone you trust.</p></div><div class="support-card"><span>☏</span><h3>Professional support</h3><p>A qualified mental-health professional can help you understand what you are experiencing and discuss appropriate support.</p></div></div>
+        <div class="safety-banner"><b>Important</b><p>MindMirror cannot monitor emergencies, assess immediate risk or contact emergency services for you. Do not rely on this app when urgent human help is needed.</p></div>
+      </section>
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body></html>
