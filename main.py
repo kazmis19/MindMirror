@@ -44,6 +44,18 @@ def init_db():
             created_at TEXT NOT NULL
         )""")
 
+        con.execute("""CREATE TABLE IF NOT EXISTS comfort_notes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            content TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )""")
+
+        con.execute("""CREATE TABLE IF NOT EXISTS creative_entries (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            kind TEXT NOT NULL,
+            content TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )""")
 
 def analyze(text):
     normalized = re.sub(r"\s+", " ", text.lower()).strip()
@@ -137,6 +149,56 @@ def home():
 @app.get("/api/health")
 def health():
     return {"status": "ok", "app": "MindMirror"}
+class CreativeEntryIn(BaseModel):
+    kind: str = Field(pattern="^(doodle|gratitude)$")
+    content: str = Field(min_length=1, max_length=500000)
+
+
+@app.post("/api/creative")
+def save_creative(payload: CreativeEntryIn):
+    with connect() as con:
+        cur = con.execute(
+            """INSERT INTO creative_entries(kind, content, created_at)
+               VALUES (?, ?, ?)""",
+            (
+                payload.kind,
+                payload.content,
+                datetime.now().isoformat(timespec="seconds")
+            )
+        )
+
+    return {
+        "id": cur.lastrowid,
+        "message": "Creative activity saved successfully."
+    }
+@app.get("/api/creative")
+def get_creative_entries(date: Optional[str] = None):
+    with connect() as con:
+        if date:
+            try:
+                datetime.strptime(date, "%Y-%m-%d")
+            except ValueError:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Date must be in YYYY-MM-DD format."
+                )
+
+            rows = con.execute(
+                """SELECT id, kind, content, created_at
+                   FROM creative_entries
+                   WHERE substr(created_at, 1, 10) = ?
+                   ORDER BY created_at DESC""",
+                (date,)
+            ).fetchall()
+        else:
+            rows = con.execute(
+                """SELECT id, kind, content, created_at
+                   FROM creative_entries
+                   ORDER BY created_at DESC
+                   LIMIT 100""",
+            ).fetchall()
+
+    return [dict(row) for row in rows]
 
 @app.post("/api/checkin")
 def checkin(payload: EntryIn):
@@ -219,25 +281,112 @@ def reflection_for(emotion):
 @app.post("/api/companion")
 def companion(payload: ChatIn):
     emotion, score, crisis = analyze(payload.message)
-    if crisis:
-        reply = ("I'm really sorry things feel this difficult. Your safety matters more than this chat. "
-                 "Please reach out now to a trusted person nearby, such as a family member, friend, teacher or counsellor. "
-                 "If you may be in immediate danger, contact local emergency services or go to the nearest emergency department. "
-                 "If possible, stay with someone you trust. I’m not an emergency service and cannot monitor your safety.")
-    else:
-        reply = {
-            "anxious": "That sounds like a lot to carry. What is one part of the situation you can take one small step on today?",
-            "sad": "Thank you for putting that feeling into words. Would it help to tell someone you trust what today has been like?",
-            "angry": "It sounds frustrating. What boundary, expectation or need might be underneath that feeling?",
-            "tired": "It sounds like your energy is low. What is one thing you could postpone, simplify or ask help with?",
-            "happy": "I'm glad you shared that. What do you think contributed most to this moment?",
-            "calm": "That sounds like a steadier moment. What helped you get there?",
-            "reflective": "I'm listening. What part of this feels most important to you right now?"
-        }.get(emotion, "I'm here to help you reflect. Can you tell me a little more about what feels important?")
-    return {"reply": reply, "emotion": emotion, "crisis_flag": crisis}
 
+    if crisis:
+        reply = (
+            "I'm sorry things feel so difficult right now. "
+            "You deserve support from a real person. Please reach out "
+            "to someone you trust, such as a family member, teacher, "
+            "friend or counsellor. If you may be in immediate danger, "
+            "contact local emergency services or visit the nearest "
+            "emergency department. MindMirror cannot monitor your "
+            "safety or provide emergency assistance."
+        )
+    else:
+        responses = {
+            "anxious": [
+                "It sounds like there's a lot on your mind. What feels most urgent right now?",
+                "Let's take this one step at a time. What's one small thing that might make today easier?"
+            ],
+            "sad": [
+                "Thank you for sharing that. What has been weighing on you the most?",
+                "You don't have to figure everything out right now. Is there someone you feel comfortable talking to?"
+            ],
+            "angry": [
+                "That sounds frustrating. What do you wish had gone differently?",
+                "Let's understand what bothered you. Was it a situation, an expectation or something someone said?"
+            ],
+            "tired": [
+                "It sounds like you could use some breathing room. What's been taking most of your energy?",
+                "You don't have to do everything at once. Is there something you could simplify today?"
+            ],
+            "happy": [
+                "That's lovely to hear! What do you think made this moment special?",
+                "Let's hold on to this positive moment. What would you like to remember about it?"
+            ],
+            "calm": [
+                "It's good to notice moments like this. What do you think helped you feel settled?",
+                "What is one thing you'd like to carry forward from this peaceful moment?"
+            ],
+            "reflective": [
+                "I'm listening. What part of this feels most important to you?",
+                "Would you like to explore that feeling a little more?"
+            ]
+        }
+
+        options = responses.get(
+            emotion,
+            responses["reflective"]
+        )
+
+        reply = options[len(payload.message) % len(options)]
+
+    return {
+        "reply": reply,
+        "emotion": emotion,
+        "crisis_flag": crisis
+    }
 @app.get("/api/export")
 def export_entries():
     with connect() as con:
         rows = con.execute("SELECT kind,text,emotion,score,created_at FROM entries ORDER BY id").fetchall()
     return [dict(r) for r in rows]
+class ComfortNoteIn(BaseModel):
+    content: str = Field(min_length=1, max_length=500)
+
+
+@app.post("/api/comfort")
+def save_comfort_note(payload: ComfortNoteIn):
+    with connect() as con:
+        cur = con.execute(
+            """INSERT INTO comfort_notes(content, created_at)
+               VALUES (?, ?)""",
+            (
+                payload.content.strip(),
+                datetime.now().isoformat(timespec="seconds")
+            )
+        )
+
+    return {
+        "id": cur.lastrowid,
+        "message": "Your comfort note has been saved."
+    }
+
+
+@app.get("/api/comfort")
+def get_comfort_notes():
+    with connect() as con:
+        rows = con.execute(
+            """SELECT id, content, created_at
+               FROM comfort_notes
+               ORDER BY created_at DESC"""
+        ).fetchall()
+
+    return [dict(row) for row in rows]
+
+
+@app.delete("/api/comfort/{note_id}")
+def delete_comfort_note(note_id: int):
+    with connect() as con:
+        cur = con.execute(
+            "DELETE FROM comfort_notes WHERE id = ?",
+            (note_id,)
+        )
+
+        if cur.rowcount == 0:
+            raise HTTPException(
+                status_code=404,
+                detail="Comfort note not found."
+            )
+
+    return {"deleted": True}

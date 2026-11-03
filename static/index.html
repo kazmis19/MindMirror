@@ -18,6 +18,9 @@
       <button class="nav active" data-page="home"><span>⌂</span> Overview</button>
       <button class="nav" data-page="checkin"><span>✦</span> Mood check-in</button>
       <button class="nav" data-page="journal"><span>▤</span> My journal</button>
+      <button class="nav" data-page="calendar"><span>▦</span> Mood calendar</button>
+      <button class="nav" data-page="breathing"><span>○</span> Breathing space</button>
+      <button class="nav" data-page="creative"><span>✧</span> Creative Corner</button>
       <button class="nav" data-page="insights"><span>◷</span> Insights</button>
       <button class="nav" data-page="companion"><span>☼</span> Reflection space</button>
       <div class="side-bottom">
@@ -28,6 +31,18 @@
     <main class="main">
       <header class="topbar"><div class="mobile-brand">◒ mindmirror</div><div class="top-right"><span class="live-dot"></span> A moment for yourself</div></header>
       <section id="page-home" class="page active">
+        <!-- DAILY REFLECTION -->
+<div class="daily-reflection">
+  <div class="reflection-icon">✦</div>
+  <p class="eyebrow">A MOMENT FOR YOURSELF</p>
+  <h2>Today's Reflection</h2>
+  <p id="daily-question">
+    What is one thing you appreciate about today?
+  </p>
+  <span class="reflection-note">
+    Take your time. There's no right or wrong answer.
+  </span>
+</div>
         <div class="welcome"><div><p class="eyebrow">MONDAY, YOUR WAY</p><h1>A little space to<br><em>check in with yourself.</em></h1><p class="sub">You don't have to have it all figured out. Start with how you feel.</p></div><div class="orb"><div class="orb-inner">◒</div></div></div>
         <div class="quick-grid">
           <button class="quick-card lavender" data-go="checkin"><span class="quick-icon">✦</span><b>How are you feeling?</b><small>Take a quick mood check-in</small><span class="arrow">↗</span></button>
@@ -53,8 +68,161 @@
         <div class="section-head"><div><p class="eyebrow">YOUR WORDS</p><h2>Past entries</h2></div><button id="export-btn" class="text-btn">Export my data ↓</button></div><div id="journal-list" class="entry-list"></div>
       </section>
 
+      <section id="page-calendar" class="page">
+  <p class="eyebrow">YOUR MOOD JOURNEY</p>
+
+  <h1>Your feelings,<br><em>day by day.</em></h1>
+
+  <p class="sub">
+    Explore your recorded moods and revisit your reflections.
+    Every day is part of your journey.
+  </p>
+
+  <div class="panel calendar-panel">
+
+    <div class="calendar-header">
+      <button id="prev-month" class="calendar-arrow">←</button>
+      <h2 id="calendar-month">Month Year</h2>
+      <button id="next-month" class="calendar-arrow">→</button>
+    </div>
+
+    <div class="calendar-weekdays">
+      <span>Sun</span>
+      <span>Mon</span>
+      <span>Tue</span>
+      <span>Wed</span>
+      <span>Thu</span>
+      <span>Fri</span>
+      <span>Sat</span>
+    </div>
+
+    <div id="calendar-days" class="calendar-days"></div>
+
+    <div class="calendar-legend">
+      <span>● Happy</span>
+      <span>● Calm</span>
+      <span>● Sad</span>
+      <span>● Anxious</span>
+      <span>● Angry</span>
+      <span>● Tired</span>
+    </div>
+
+  </div>
+
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">DAILY REFLECTIONS</p>
+      <h2 id="selected-date-title">Select a date</h2>
+    </div>
+  </div>
+
+  <div id="calendar-entries" class="entry-list">
+    <div class="empty">
+      Select a date to explore your saved entries.
+    </div>
+  </div>
+
+</section>
+<section id="page-breathing" class="page">
+  <p class="eyebrow">A MOMENT TO PAUSE</p>
+  <h1>Find your<br><em>breathing space.</em></h1>
+  <p class="sub">Take a gentle pause. Breathe naturally and follow the circle at your own pace.</p>
+
+  <div class="panel breathing-panel">
+    <div class="breathing-circle" id="breathing-circle">
+      <span id="breathing-instruction">Ready?</span>
+    </div>
+    <p id="breathing-timer">A little moment for yourself</p>
+    <div class="breathing-controls">
+      <button id="start-breathing" class="primary">Start exercise →</button>
+      <button id="stop-breathing" class="text-btn">Stop</button>
+    </div>
+    <p class="breathing-note">Breathe comfortably. There is no need to hold your breath. Stop if you feel uncomfortable or dizzy.</p>
+  </div>
+</section>
+<section id="page-creative" class="page">
+  <p class="eyebrow">YOUR CREATIVE SPACE</p>
+  <h1>A little creativity,<br><em>a little joy.</em></h1>
+  <p class="sub">Explore these little activities at your own pace. There is no score and no pressure.</p>
+
+  <div class="creative-grid">
+
+    <button class="creative-card" data-game="color">
+      <span class="creative-icon">🎨</span>
+      <h2>Color Your Mood</h2>
+      <p>Express your feelings through colors.</p>
+      <span class="creative-link">Explore activity →</span>
+    </button>
+
+    <button class="creative-card" data-game="doodle">
+      <span class="creative-icon">✏️</span>
+      <h2>Digital Doodle</h2>
+      <p>Draw, sketch and create freely.</p>
+      <span class="creative-link">Start drawing →</span>
+    </button>
+
+    <button class="creative-card" data-game="garden">
+      <span class="creative-icon">🌱</span>
+      <h2>Gratitude Garden</h2>
+      <p>Collect little moments worth appreciating.</p>
+      <span class="creative-link">Grow your garden →</span>
+    </button>
+        <button class="creative-card" data-game="comfort">
+      <span class="creative-icon">🫙</span>
+      <h2>Comfort Jar</h2>
+      <p>Save little reminders that make difficult days feel lighter.</p>
+      <span class="creative-link">Open your jar →</span>
+    </button>
+
+  </div>
+
+  <div id="creative-activity" class="panel creative-activity">
+    <p class="eyebrow">PICK AN ACTIVITY</p>
+    <h2>Your creative corner is ready.</h2>
+    <p>Choose any activity above to get started.</p>
+    </div>
+
+  <div class="panel creative-history">
+    <p class="eyebrow">YOUR MEMORIES</p>
+    <h2>Creative History ✨</h2>
+    <p>Revisit the little things you created and appreciated.</p>
+
+    <div class="history-filter">
+      <label for="history-date">Choose a date</label>
+      <input type="date" id="history-date">
+      <button id="load-history">View memories</button>
+    </div>
+
+    <div id="creative-history-list">
+      <p>Your saved drawings and gratitude notes will appear here.</p>
+    </div>
+  </div>
+</section>
       <section id="page-insights" class="page">
         <p class="eyebrow">PATTERNS, NOT LABELS</p><h1>Getting to know<br><em>your emotional patterns.</em></h1><p class="sub">These reflections are estimates from the words you choose to share.</p>
+        <div class="weekly-report panel">
+  <p class="eyebrow">YOUR LAST 7 DAYS</p>
+  <h2>Your weekly reflection</h2>
+  <p class="weekly-intro">A gentle overview of the moments you've recorded.</p>
+
+  <div class="weekly-stats">
+    <div>
+      <small>TOTAL ENTRIES</small>
+      <b id="weekly-total">0</b>
+    </div>
+    <div>
+      <small>DAYS REFLECTED</small>
+      <b id="weekly-days">0</b>
+    </div>
+    <div>
+      <small>COMMON THEME</small>
+      <b id="weekly-mood">—</b>
+    </div>
+  </div>
+
+  <h3>Daily activity</h3>
+  <div id="weekly-activity"></div>
+</div>
         <div class="stats"><div class="stat"><small>ENTRIES ANALYSED</small><b id="stat-total">0</b><span>Recent entries</span></div><div class="stat"><small>AVERAGE MOOD SCORE</small><b id="stat-score">—</b><span>Estimated scale: 1–5</span></div><div class="stat"><small>MOST COMMON THEME</small><b id="stat-theme">—</b><span>In recent entries</span></div></div>
         <div class="chart-grid"><div class="panel"><h3>Emotion themes</h3><canvas id="emotion-chart"></canvas></div><div class="panel"><h3>Recent mood estimates</h3><canvas id="trend-chart"></canvas></div></div>
         <div class="insight-card"><span>✧ A gentle reflection</span><p id="insight-text">Add a few entries to discover reflections about your patterns.</p></div>
@@ -66,10 +234,69 @@
       </section>
 
       <section id="page-support" class="page">
-        <p class="eyebrow">SUPPORT & SAFETY</p><h1>You deserve<br><em>support beyond a screen.</em></h1><p class="sub">If things feel difficult, reaching out to a real person can make a difference.</p>
-        <div class="support-grid"><div class="support-card"><span>♡</span><h3>Talk to someone you trust</h3><p>Consider contacting a trusted friend, family member, teacher, counsellor or another supportive person.</p></div><div class="support-card"><span>✚</span><h3>If you are in immediate danger</h3><p>Contact your local emergency number or go to the nearest emergency department. If possible, stay with someone you trust.</p></div><div class="support-card"><span>☏</span><h3>Professional support</h3><p>A qualified mental-health professional can help you understand what you are experiencing and discuss appropriate support.</p></div></div>
-        <div class="safety-banner"><b>Important</b><p>MindMirror cannot monitor emergencies, assess immediate risk or contact emergency services for you. Do not rely on this app when urgent human help is needed.</p></div>
-      </section>
+  <p class="eyebrow">SUPPORT & SAFETY</p>
+  <h1>You deserve<br><em>support beyond a screen.</em></h1>
+  <p class="sub">
+    If things feel difficult, reaching out to a real person can make a difference.
+  </p>
+
+  <div class="support-grid">
+
+    <div class="support-card">
+      <span>♡</span>
+      <h3>Talk to someone you trust</h3>
+      <p>
+        Consider contacting a trusted friend, family member,
+        teacher, counsellor or another supportive person.
+      </p>
+    </div>
+
+    <div class="support-card">
+      <span>✚</span>
+      <h3>Emergency assistance</h3>
+      <p>
+        For immediate emergency assistance anywhere in India,
+        call <strong>112</strong>.
+      </p>
+      <a href="tel:112">Call 112</a>
+    </div>
+
+    <div class="support-card">
+      <span>☏</span>
+      <h3>Mental health support</h3>
+      <p>
+        Tele-MANAS offers free mental health support through
+        trained counsellors, 24 hours a day.
+      </p>
+      <strong>14416</strong>
+      <br>
+      <a href="tel:14416">Call Tele-MANAS</a>
+    </div>
+
+    <div class="support-card">
+      <span>♡</span>
+      <h3>Child Helpline</h3>
+      <p>
+        Children who need care, protection or assistance
+        can contact the Child Helpline.
+      </p>
+      <strong>1098</strong>
+      <br>
+      <a href="tel:1098">Call Child Helpline</a>
+    </div>
+
+  </div>
+
+  <div class="safety-banner">
+    <b>Important</b>
+    <p>
+      MindMirror is a self-reflection tool, not a substitute
+      for professional mental health care. It cannot monitor
+      emergencies or contact emergency services for you.
+      Please seek real-world help when needed.
+    </p>
+  </div>
+</section>
     </main>
   </div>
   <script src="/static/app.js"></script>
